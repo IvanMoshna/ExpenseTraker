@@ -23,12 +23,10 @@ public class ExpenseController {
     }
 
     @PostMapping("/addExpense")
-    public String addUnfulfilledOrder(@RequestParam String date,
-                                      @RequestParam String time,
-                                      @RequestParam String description,
+    public String addUnfulfilledOrder(@RequestParam String description,
                                       @RequestParam float price,
                                       @RequestParam String comment) {
-        return expenseService.addExpense(date, time, description, comment, price);
+        return expenseService.addExpense(description, comment, price);
     }
 
     @GetMapping("{id}")
@@ -39,13 +37,11 @@ public class ExpenseController {
 
     @PostMapping("{id}/update")
     public String updateExpense(@PathVariable(value = "id") long id,
-                                @RequestParam String date,
-                                @RequestParam String time,
                                 @RequestParam String description,
                                 @RequestParam float price,
                                 @RequestParam String comment,
                                 Model model) throws Exception {
-        return expenseService.expenseUpdate(id, date, time, description, comment, price, model);
+        return expenseService.expenseUpdate(id, description, comment, price, model);
     }
 
     @PostMapping("{id}/remove")

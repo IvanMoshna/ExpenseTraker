@@ -3,13 +3,19 @@ package com.moshna.traker.service;
 import com.moshna.traker.dto.ExpenseDto;
 import com.moshna.traker.model.Expense;
 import com.moshna.traker.repo.ExpenseRepo;
+import org.hibernate.type.LocalDateTimeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import javax.jws.WebParam;
+import java.time.Clock;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -24,9 +30,14 @@ public class ExpenseService {
         this.expenseRepo = expenseRepo;
     }
 
-    public String addExpense(String date, String time, String description, String comment, float price) {
-        //TODO: remove date and time from constructor, do it automatically
-        Expense expense = new Expense(date,time, description, price, comment);
+    public String addExpense(String description, String comment, float price) {
+        LocalDate date = LocalDate.now();
+        LocalTime time = LocalTime.now();
+        String timeString = time.toString();
+        String timeToExpense = timeString.split("\\.")[0];
+
+        //TODO: check for double
+        Expense expense = new Expense(date.toString(), timeToExpense, description, price, comment);
         expenseRepo.save(expense);
 
         return "redirect:/" + EXPENSE_PAGE;
@@ -36,6 +47,7 @@ public class ExpenseService {
 
         List<ExpenseDto> expensesDtoList = getExpenseDtoList(getExpenseList());
         model.addAttribute("expenses", expensesDtoList);
+        model.addAttribute("expenseSum", getSumOfExpense(expensesDtoList));
 
         return EXPENSE_PAGE;
     }
@@ -61,6 +73,14 @@ public class ExpenseService {
         }
     }
 
+    public float getSumOfExpense(List<ExpenseDto> expenseDtoList) {
+        float result = 0;
+        for (ExpenseDto expenseDto: expenseDtoList) {
+            result += expenseDto.getPrice();
+        }
+        return result;
+    }
+
     public String expenseDetails(long id, Model model) throws Exception {
 
         Expense expense = expenseRepo.findById(id).orElseThrow(()->new Exception("Expense not found - " + id));
@@ -68,13 +88,10 @@ public class ExpenseService {
         return "expense_details";
     }
 
-    public String expenseUpdate(long id, String date, String time,
-                                String description, String comment,
+    public String expenseUpdate(long id, String description, String comment,
                                 float price, Model model) throws Exception {
         Expense expense = expenseRepo.findById(id).orElseThrow(()->new Exception("Expense not found - " + id));
 
-        expense.setDate(date);
-        expense.setTime(time);
         expense.setDescription(description);
         expense.setComment(comment);
         expense.setPrice(price);
@@ -93,4 +110,6 @@ public class ExpenseService {
         model.addAttribute("expense", expenseDtoList);
         return "redirect:/" + EXPENSE_PAGE;
     }
+
+    //TODO: filter by period
 }
