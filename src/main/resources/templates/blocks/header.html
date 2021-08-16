@@ -1,0 +1,36 @@
+<div th:fragment="header">
+  <div class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="container d-flex justify-content-between">
+      <a href="#" class="navbar-brand d-flex align-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+             stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2"
+             viewBox="0 0 24 24" focusable="false">
+          <strong>Expense Tracker</strong><br>
+
+      </a>
+      <form action="/home">
+        <button type="submit" class="btn">Home</button>
+      </form>
+      <form th:action="@{/logout}" method="post">
+        <button type="submit" class="btn">Logout</button>
+      </form>>
+    </div>
+  </div>
+</div>
+<style>
+    .btn {
+        display: inline-block;
+        background: #8C959D;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 10px;
+        padding: 20px;
+        margin-left: 15px;
+        margin-bottom: 10px;
+    }
+</style>
+<style>
+    body {
+        margin: 20px;
+    }
+</style>

@@ -2,7 +2,9 @@ package com.moshna.traker.controller;
 
 import com.moshna.traker.service.ExpenseService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -16,8 +18,8 @@ public class ExpenseController {
     }
 
     @GetMapping("/expense")
-    public String mainExpense() {
-        return "expense";
+    public String mainExpense(Model model) {
+        return expenseService.getExpenses(model);
     }
 
     @PostMapping("/addExpense")
@@ -27,6 +29,29 @@ public class ExpenseController {
                                       @RequestParam float price,
                                       @RequestParam String comment) {
         return expenseService.addExpense(date, time, description, comment, price);
+    }
+
+    @GetMapping("{id}")
+    public String expenseDetails(@PathVariable(value = "id") long id, Model model) throws Exception {
+
+        return expenseService.expenseDetails(id, model);
+    }
+
+    @PostMapping("{id}/update")
+    public String updateExpense(@PathVariable(value = "id") long id,
+                                @RequestParam String date,
+                                @RequestParam String time,
+                                @RequestParam String description,
+                                @RequestParam float price,
+                                @RequestParam String comment,
+                                Model model) throws Exception {
+        return expenseService.expenseUpdate(id, date, time, description, comment, price, model);
+    }
+
+    @PostMapping("{id}/remove")
+    public String removeExpense(@PathVariable(value = "id") long id,
+                                Model model) {
+        return expenseService.expenseRemove(id, model);
     }
 
 }

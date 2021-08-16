@@ -1,15 +1,6 @@
-package com.moshna.traker.model;
+package com.moshna.traker.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Entity
-public class Expense {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class ExpenseDto {
     private long id;
     private String date;
     private String time;
@@ -17,18 +8,10 @@ public class Expense {
     private float price;
     private String comment;
 
-    public Expense() {
+    public ExpenseDto() {
     }
 
-    public Expense(String date, String time, String description, float price, String comment) {
-        this.date = date;
-        this.time = time;
-        this.description = description;
-        this.price = price;
-        this.comment = comment;
-    }
-
-    public Expense(Integer id, String date, String time, String description, float price, String comment) {
+    public ExpenseDto(long id, String date, String time, String description, float price, String comment) {
         this.id = id;
         this.date = date;
         this.time = time;
