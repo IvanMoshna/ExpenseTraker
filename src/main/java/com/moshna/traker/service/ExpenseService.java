@@ -48,6 +48,7 @@ public class ExpenseService {
         List<ExpenseDto> expensesDtoList = getExpenseDtoList(getExpenseList());
         model.addAttribute("expenses", expensesDtoList);
         model.addAttribute("expenseSum", getSumOfExpense(expensesDtoList));
+        model.addAttribute("averageExpense", getAverageExpense(expensesDtoList));
 
         return EXPENSE_PAGE;
     }
@@ -79,6 +80,11 @@ public class ExpenseService {
             result += expenseDto.getPrice();
         }
         return result;
+    }
+
+    public float getAverageExpense(List<ExpenseDto> expenseDtoList) {
+        if(expenseDtoList.size() == 0) return 0;
+        else return getSumOfExpense(expenseDtoList)/expenseDtoList.size();
     }
 
     public String expenseDetails(long id, Model model) throws Exception {
