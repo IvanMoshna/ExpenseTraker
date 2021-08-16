@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Expense page</title>
+</head>
+<body>
+<div class="container order-md-2 mt-5 mb-5">
+  <form action="/addExpense" method="post" enctype="multipart/form-data">
+    <input type="text" name="date" placeholder="Add date" class="form-control" required><br>
+    <input type="text" name="time" placeholder="Add time" class="form-control" required><br>
+    <input type="text" name="description" placeholder="Add description" class="form-control" required><br>
+    <input type="number" name="price" placeholder="Add price" class="form-control" required><br>
+    <input type="text" name="comment" placeholder="Add comment" class="form-control" required><br>
+    <button type="submit" class="btn btn-secondary">Add</button>
+  </form>
+</div>
+</body>
+</html>
