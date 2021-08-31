@@ -87,12 +87,12 @@ public class ExpenseService {
         else return getSumOfExpense(expenseDtoList)/expenseDtoList.size();
     }
 
-    public String expenseDetails(long id, Model model) throws Exception {
+    /*public String expenseDetails(long id, Model model) throws Exception {
 
         Expense expense = expenseRepo.findById(id).orElseThrow(()->new Exception("Expense not found - " + id));
         model.addAttribute("expense", expense);
         return "expense_details";
-    }
+    }*/
 
     public String expenseUpdate(long id, String description, String comment,
                                 float price, Model model) throws Exception {
@@ -117,5 +117,17 @@ public class ExpenseService {
         return "redirect:/" + EXPENSE_PAGE;
     }
 
-    //TODO: filter by period
+    //TODO: check that we are got date or create a calendar
+    public String filterByDates(String fromDate, String toDate, Model model) {
+        List<ExpenseDto> expenseAllDtoList = getExpenseDtoList(getExpenseList());
+        List<ExpenseDto> expenseDtoFilteredList = new ArrayList<>();
+        for (ExpenseDto expenseDto: expenseAllDtoList) {
+            if(LocalDate.parse(expenseDto.getDate()).isAfter(LocalDate.parse(fromDate)) &&
+                    LocalDate.parse(expenseDto.getDate()).isBefore(LocalDate.parse(toDate))) {
+                expenseDtoFilteredList.add(expenseDto);
+            }
+        }
+        model.addAttribute("expenses", expenseDtoFilteredList);
+        return EXPENSE_PAGE;
+    }
 }

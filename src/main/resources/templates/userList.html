@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User list page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header><br>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Role</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ul th:each="user : ${users}">
+        <tr>
+            <td><div th:text="${user.getId()}"></div></td>
+            <td><div th:text="${user.getUsername()}"></div></td>
+            <td><div th:text="${user.getRoles()}"></div></td>
+            <td><a th:href="'/user/' + ${user.getId()}">Edit</a></td>
+        </tr>
+    </ul>
+    </tbody>
+</table>
+</body>
+</html>

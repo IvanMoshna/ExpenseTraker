@@ -17,6 +17,9 @@ public class ExpenseController {
         this.expenseService = expenseService;
     }
 
+    @GetMapping("/login")
+    public String main() {return "/login"; }
+
     @GetMapping("/expense")
     public String mainExpense(Model model) {
         return expenseService.getExpenses(model);
@@ -32,11 +35,12 @@ public class ExpenseController {
     @GetMapping("{id}")
     public String expenseDetails(@PathVariable(value = "id") long id, Model model) throws Exception {
 
-        return expenseService.expenseDetails(id, model);
+        return "";
+        //return expenseService.expenseDetails(id, model);
     }
 
     @PostMapping("{id}/update")
-    public String updateExpense(@PathVariable(value = "id") long id,
+    public String updateExpense(@PathVariable long id,
                                 @RequestParam String description,
                                 @RequestParam float price,
                                 @RequestParam String comment,
@@ -49,5 +53,13 @@ public class ExpenseController {
                                 Model model) {
         return expenseService.expenseRemove(id, model);
     }
+
+    @PostMapping("/filteredByDates")
+    public String filteredByDates(@RequestParam String fromDate,
+                                  @RequestParam String toDate,
+                                  Model model) {
+        return expenseService.filterByDates(fromDate, toDate, model);
+    }
+
 
 }

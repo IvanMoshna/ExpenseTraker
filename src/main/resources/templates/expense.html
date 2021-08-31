@@ -45,5 +45,12 @@
 <div th:text="${expenseSum}"></div>
 <th scope="col">Average Expense: </th>
 <div th:text="${averageExpense}"></div>
+<div class="container order-md-2 mt-5 mb-5">
+    <form action="/filteredByDates" method="post" enctype="multipart/form-data">
+        <input type="text" name="fromDate" placeholder="From date" class="form-control"><br>
+        <input type="text" name="toDate" placeholder="To date" class="form-control" required><br>
+        <button type="submit" class="btn btn-secondary">Filter by dates</button>
+    </form>
+</div>
 </body>
 </html>
