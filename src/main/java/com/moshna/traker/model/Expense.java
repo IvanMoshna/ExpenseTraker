@@ -1,9 +1,6 @@
 package com.moshna.traker.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Expense {
@@ -16,6 +13,18 @@ public class Expense {
     private String description;
     private float price;
     private String comment;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Expense() {
     }
@@ -35,6 +44,16 @@ public class Expense {
         this.description = description;
         this.price = price;
         this.comment = comment;
+    }
+
+    public Expense(Integer id, String date, String time, String description, float price, String comment, User user) {
+        this.id = id;
+        this.date = date;
+        this.time = time;
+        this.description = description;
+        this.price = price;
+        this.comment = comment;
+        this.user = user;
     }
 
     public long getId() {

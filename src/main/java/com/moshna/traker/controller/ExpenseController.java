@@ -1,6 +1,8 @@
 package com.moshna.traker.controller;
 
+import com.moshna.traker.model.User;
 import com.moshna.traker.service.ExpenseService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,19 +20,21 @@ public class ExpenseController {
     }
 
     @GetMapping("/login")
-    public String main() {return "/login"; }
+    public String main(Model model) { return "/login"; }
 
-    @GetMapping("/expense")
-    public String mainExpense(Model model) {
-        return expenseService.getExpenses(model);
-    }
+    /*@GetMapping("/expense")
+    public String mainExpense(@AuthenticationPrincipal User user,
+                              Model model) {
+        return expenseService.getExpenses(user, model); }*/
 
-    @PostMapping("/addExpense")
-    public String addUnfulfilledOrder(@RequestParam String description,
+/*    @PostMapping("/addExpense")
+    public String addUnfulfilledOrder(@AuthenticationPrincipal User user,
+                                      @RequestParam String description,
                                       @RequestParam float price,
-                                      @RequestParam String comment) {
-        return expenseService.addExpense(description, comment, price);
-    }
+                                      @RequestParam String comment,
+                                      Model model) {
+        return expenseService.addExpense(user, description, comment, price, model);
+    }*/
 
     @GetMapping("{id}")
     public String expenseDetails(@PathVariable(value = "id") long id, Model model) throws Exception {

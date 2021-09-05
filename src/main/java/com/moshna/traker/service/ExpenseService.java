@@ -2,7 +2,9 @@ package com.moshna.traker.service;
 
 import com.moshna.traker.dto.ExpenseDto;
 import com.moshna.traker.model.Expense;
+import com.moshna.traker.model.User;
 import com.moshna.traker.repo.ExpenseRepo;
+import com.moshna.traker.repo.UserRepo;
 import org.hibernate.type.LocalDateTimeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,14 +25,19 @@ public class ExpenseService {
 
     @Autowired
     private final ExpenseRepo expenseRepo;
+/*    //TODO:remove userRepo
+    @Autowired
+    private final UserRepo userRepo;*/
+
 
     private static final String EXPENSE_PAGE = "expense";
 
     public ExpenseService(ExpenseRepo expenseRepo) {
         this.expenseRepo = expenseRepo;
+        //this.userRepo = userRepo;
     }
 
-    public String addExpense(String description, String comment, float price) {
+    public String addExpense( String description, String comment, float price, double userId) {
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
         String timeString = time.toString();
@@ -40,18 +47,19 @@ public class ExpenseService {
         Expense expense = new Expense(date.toString(), timeToExpense, description, price, comment);
         expenseRepo.save(expense);
 
-        return "redirect:/" + EXPENSE_PAGE;
+            //return EXPENSE_PAGE;
+        return "redirect:/home";
     }
 
-    public String getExpenses(Model model) {
-
+    /*public String getExpenses(User user, Model model) {
         List<ExpenseDto> expensesDtoList = getExpenseDtoList(getExpenseList());
+        model.addAttribute("userId", user.getId().toString());
         model.addAttribute("expenses", expensesDtoList);
         model.addAttribute("expenseSum", getSumOfExpense(expensesDtoList));
         model.addAttribute("averageExpense", getAverageExpense(expensesDtoList));
 
         return EXPENSE_PAGE;
-    }
+    }*/
 
     public List<ExpenseDto> getExpenseDtoList(List<Expense> expenseList) {
         List<ExpenseDto> expenseDtoList = new ArrayList<>();
