@@ -37,18 +37,20 @@ public class ExpenseService {
         //this.userRepo = userRepo;
     }
 
-    public String addExpense( String description, String comment, float price, double userId) {
+    public String addExpense(String description, String comment, double price, long userId) {
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
         String timeString = time.toString();
         String timeToExpense = timeString.split("\\.")[0];
 
         //TODO: check for double
-        Expense expense = new Expense(date.toString(), timeToExpense, description, price, comment);
+        Expense expense = new Expense(date.toString(), timeToExpense, description, price, comment, userId);
         expenseRepo.save(expense);
 
-            //return EXPENSE_PAGE;
-        return "redirect:/home";
+        //return EXPENSE_PAGE;
+        //TODO: return to page where expense added succsesfully
+        //return "redirect: /user/"+ userId + "/expenses";
+        return "userExpense";
     }
 
     /*public String getExpenses(User user, Model model) {

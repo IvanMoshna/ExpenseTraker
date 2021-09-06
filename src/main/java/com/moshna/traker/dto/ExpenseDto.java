@@ -5,13 +5,13 @@ public class ExpenseDto {
     private String date;
     private String time;
     private String description;
-    private float price;
+    private double price;
     private String comment;
 
     public ExpenseDto() {
     }
 
-    public ExpenseDto(long id, String date, String time, String description, float price, String comment) {
+    public ExpenseDto(long id, String date, String time, String description, double price, String comment) {
         this.id = id;
         this.date = date;
         this.time = time;
@@ -52,11 +52,11 @@ public class ExpenseDto {
         this.description = description;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

@@ -11,25 +11,36 @@ public class Expense {
     private String date;
     private String time;
     private String description;
-    private float price;
+    private double price;
     private String comment;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    /*@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private User user;
+    private User user;*/
 
-    public User getUser() {
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    //TODO: foreihg key
+    private Long userId;
+
+    /*public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
-    }
+    }*/
 
     public Expense() {
     }
 
-    public Expense(String date, String time, String description, float price, String comment) {
+    public Expense(String date, String time, String description, double price, String comment) {
         this.date = date;
         this.time = time;
         this.description = description;
@@ -37,7 +48,7 @@ public class Expense {
         this.comment = comment;
     }
 
-    public Expense(Integer id, String date, String time, String description, float price, String comment) {
+    public Expense(Integer id, String date, String time, String description, double price, String comment) {
         this.id = id;
         this.date = date;
         this.time = time;
@@ -46,14 +57,14 @@ public class Expense {
         this.comment = comment;
     }
 
-    public Expense(Integer id, String date, String time, String description, float price, String comment, User user) {
+    public Expense(String date, String time, String description, double price, String comment, Long userId) {
         this.id = id;
         this.date = date;
         this.time = time;
         this.description = description;
         this.price = price;
         this.comment = comment;
-        this.user = user;
+        this.userId = userId;
     }
 
     public long getId() {
@@ -88,11 +99,11 @@ public class Expense {
         this.description = description;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

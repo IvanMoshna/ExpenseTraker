@@ -10,7 +10,7 @@
 <body>
 <header th:insert="blocks/header :: header"></header><br>
 <div class="container order-md-2 mt-5 mb-5">
-  <form th:action="${expense.id} +'/update'" method="post" enctype="multipart/form-data">
+  <form th:action="'/user/' + ${userId} + '/expenses/' + ${expense.id} +'/update'" method="post" enctype="multipart/form-data">
     <label class="form-label">Date:</label>
     <div th:text="${expense.getDate()}"></div><br>
     <label class="form-label">Time:</label>

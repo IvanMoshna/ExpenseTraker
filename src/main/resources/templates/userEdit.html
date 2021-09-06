@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="container order-md-2 mt-5 mb-5">
-    <form th:action="${user}" method="post" enctype="multipart/form-data">
+    <form th:action="'/user/' + ${user} + '/update'" method="post" enctype="multipart/form-data">
         <label class="form-label">Id</label>
         <input type="text" name="firstName" th:value="${user.getId()}" class="form-control" required><br>
         <label class="form-label">Username</label>
