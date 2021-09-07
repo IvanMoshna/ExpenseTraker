@@ -52,8 +52,12 @@ public class UserController {
     }
 
     @PostMapping("{user}/update")
-    public String userUpdate(Model model) throws Exception {
-        return userService.userUpdate(model);
+    public String userUpdate(
+            @PathVariable(value = "user") long id,
+                            @RequestParam String userName,
+                            @RequestParam String userRole,
+                            Model model) throws Exception {
+        return userService.userUpdate(id, userName, userRole, model);
     }
 
     @PostMapping("/addExpenseToUser")

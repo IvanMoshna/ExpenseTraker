@@ -35,11 +35,18 @@ public class UserService  implements UserDetailsService {
     }
 
     public String getUserList(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        /*if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("USER"))) {
+            System.out.println("hi");
+        }*/
         model.addAttribute("users", userRepo.findAll());
         return "userList";
     }
 
     public String getUserExpenses(Model model) {
+        //TODO: корректно вытаскивать пользователя
+        User user = getCurrentlyUser();
+        model.addAttribute("user", user);
         model.addAttribute("userId", getCurrentlyUser().getId());
         model.addAttribute("expenses", expenseRepo.findAllByUserId(getCurrentlyUser().getId()));
         return "userExpense";
@@ -50,15 +57,15 @@ public class UserService  implements UserDetailsService {
         return "userEdit";
     }
 
-    public String userUpdate(Model model) throws Exception {
+    public String userUpdate(long id, String userName, String userRole, Model model) throws Exception {
 
-        Long id = getCurrentlyUser().getId();
+        //Long id = getCurrentlyUser().getId();
         User updatedUser = userRepo.findById(id).orElseThrow(()->
                 new Exception("User not found - " + id));
-        /*updatedUser.setId(user.getId());
-        updatedUser.setUsername(user.getUsername());
-        updatedUser.setRoles(user.getRoles());*/
-        //userRepo.save(updatedUser);
+        //updatedUser.setId(id);
+        updatedUser.setUsername(userName);
+        //updatedUser.setRoles(userRole);
+        userRepo.save(updatedUser);
         return "userExpense";
     }
 
