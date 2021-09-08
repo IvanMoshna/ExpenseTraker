@@ -7,17 +7,19 @@ public class ExpenseDto {
     private String description;
     private double price;
     private String comment;
+    private Long userId;
 
     public ExpenseDto() {
     }
 
-    public ExpenseDto(long id, String date, String time, String description, double price, String comment) {
+    public ExpenseDto(long id, String date, String time, String description, double price, String comment, long userId) {
         this.id = id;
         this.date = date;
         this.time = time;
         this.description = description;
         this.price = price;
         this.comment = comment;
+        this.userId = userId;
     }
 
     public long getId() {
@@ -66,5 +68,13 @@ public class ExpenseDto {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

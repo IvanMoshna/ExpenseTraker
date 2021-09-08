@@ -16,9 +16,35 @@
         <input type="text" name="userName" th:value="${user.getUsername()}" class="form-control" required><br>
         <label class="form-label">Role</label>
         <input type="text" name="userRole" th:value="${user.getRoles()}" class="form-control"><br>
-        <!--//TODO: выпадающий список ролей-->
-        <input type="file" name="file" class="button"><br>
+        <!--TODO: выпадающий список ролей-->
+        <!--TODO: расходы юзера-->
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+                <th scope="col">Description</th>
+                <th scope="col">Price</th>
+                <th scope="col">Comment</th>
+            </tr>
+            </thead>
+            <tbody>
+            <ul th:each="expense : ${expenses}">
+                <tr>
+                    <td><div th:text="${expense.getDate()}"></div></td>
+                    <td><div th:text="${expense.getTime()}"></div></td>
+                    <td><div th:text="${expense.getDescription()}"></div></td>
+                    <td><div th:text="${expense.getPrice()}"></div></td>
+                    <td><div th:text="${expense.getComment()}"></div></td>
+                    <td><a th:href="'/user/' + ${userId} + '/expenses/' + ${expense.getId()}">Edit</a></td>
+                </tr>
+            </ul>
+            </tbody>
+        </table>
         <button type="submit" class="btn">Update</button>
+    </form>
+    <form th:action="'/user/' + ${user.getId()} + '/remove'" method="post">
+        <button type="submit" class="btn">Delete</button>
     </form>
    <!-- <form th:action="${user.id} +'/remove'" method="post">
         <button type="submit" class="btn">Delete</button>

@@ -53,12 +53,6 @@
         <button type="submit" class="btn btn-secondary">Filter by dates</button>
     </form>
 </div>
-<div th:switch="${user.getRoles()}">
-    <p th:case="'admin'">User is an administrator</p>
-    <p th:case="#{roles.manager}">User is a manager</p>
-    <p th:case="*">User is some other thing</p>
-</div>
-<!--TODO:сделать так, чтобы это было в хидере и чтобы это видел только админ и менеджеры-->
 <p><a th:href="@{/user}">User List</a></p>
 
 </body>

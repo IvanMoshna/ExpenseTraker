@@ -23,7 +23,7 @@
     <input type="text" name="comment" th:value="${expense.getComment()}" class="form-control"><br>
     <button type="submit" class="btn">Update</button>
   </form>
-  <form th:action="${expense.id} +'/remove'" method="post">
+  <form th:action="'/user/' + ${userId} + '/expenses/' + ${expense.id} +'/remove'" method="post">
     <button type="submit" class="btn">Delete</button>
   </form>
 
