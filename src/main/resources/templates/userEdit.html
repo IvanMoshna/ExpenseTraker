@@ -15,9 +15,28 @@
         <label class="form-label">Username</label>
         <input type="text" name="userName" th:value="${user.getUsername()}" class="form-control" required><br>
         <label class="form-label">Role</label>
-        <input type="text" name="userRole" th:value="${user.getRoles()}" class="form-control"><br>
-        <!--TODO: выпадающий список ролей-->
-        <!--TODO: расходы юзера-->
+        <!--<input type="text" name="userRole" th:value="${user.getRoles()}" class="form-control"><br>-->
+        <!--<div>
+            <select name="roles" class="form-control" required>
+
+                <option th:text="${user.getRoles()}"></option>
+                <option th:each="role : ${roles}"
+                        th:text="${role}">
+                </option>
+            </select>
+        </div>-->
+
+        <tr>
+            <td></td>
+            <td>
+                <th:block th:each="role : ${roles}">
+                    <input type="checkbox"/>
+                    <label th:text="${role}" th:checked="${isChecked}" ></label>
+                    <!--<label><input type="checkbox" name="${role}" ${user.roles?seq_contains(role)?string("checked", "")}>${role}</label>-->
+                </th:block>
+            </td>
+        </tr>
+
         <table class="table">
             <thead>
             <tr>
@@ -46,11 +65,6 @@
     <form th:action="'/user/' + ${user.getId()} + '/remove'" method="post">
         <button type="submit" class="btn">Delete</button>
     </form>
-   <!-- <form th:action="${user.id} +'/remove'" method="post">
-        <button type="submit" class="btn">Delete</button>
-    </form>-->
-
-
 </div>
 </body>
 </html>

@@ -53,7 +53,13 @@
         <button type="submit" class="btn btn-secondary">Filter by dates</button>
     </form>
 </div>
-<p><a th:href="@{/user}">User List</a></p>
+<!--<div th:switch="${user.getRoles()}">
+    <p th:case="[USER]">You are user</p>
+    <p th:case="MANAGER"><a th:href="@{/user}">User List</a></p>
+    <p th:case="*">${user.getRoles()}</p>
+</div>
+<div th:text="${user.getRoles()}"></div>-->
+<a th:href="@{/user}">User List</a></p>
 
 </body>
 </html>

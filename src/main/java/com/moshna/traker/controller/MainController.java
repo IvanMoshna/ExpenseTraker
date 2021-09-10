@@ -25,7 +25,7 @@ public class MainController {
     @GetMapping("/")
     public String home(@AuthenticationPrincipal User userN,
                        Model model) {
-        //TODO:can i get user id correctly?
+        //TODO: can i get user id correctly?
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = "";
         if (!(authentication instanceof AnonymousAuthenticationToken)) {

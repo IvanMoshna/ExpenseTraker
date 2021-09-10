@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -36,17 +38,21 @@ public class UserController {
     }
 
     @GetMapping("{user}")
-    public String userEdit(@PathVariable User user, Model model) {
+    public String userEdit(
+            @PathVariable User user,
+
+            Model model) {
         return userService.userEdit(user, model);
     }
 
     @PostMapping("{user}/update")
     public String userUpdate(
-            @PathVariable(value = "user") long id,
+                            @PathVariable(value = "user") long id,
                             @RequestParam String userName,
                             @RequestParam String userRole,
+                            @RequestParam Map<String, String> form,
                             Model model) throws Exception {
-        return userService.userUpdate(id, userName, userRole, model);
+        return userService.userUpdate(id, userName, userRole, form, model);
     }
 
     @PostMapping("/addExpenseToUser")
@@ -83,8 +89,4 @@ public class UserController {
                                 Model model) throws Exception {
         return userService.removeExpense(id, model);
     }
-
-    //TODO: remove expense
-
-
 }

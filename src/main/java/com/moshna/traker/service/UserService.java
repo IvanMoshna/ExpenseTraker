@@ -3,6 +3,7 @@ package com.moshna.traker.service;
 import com.moshna.traker.dto.ExpenseDto;
 import com.moshna.traker.dto.UserDto;
 import com.moshna.traker.model.Expense;
+import com.moshna.traker.model.Role;
 import com.moshna.traker.model.User;
 import com.moshna.traker.repo.ExpenseRepo;
 import com.moshna.traker.repo.UserRepo;
@@ -16,9 +17,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService  implements UserDetailsService {
@@ -36,37 +36,77 @@ public class UserService  implements UserDetailsService {
 
     public String getUserList(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        /*if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("USER"))) {
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("USER")) ||
+                auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("MANAGER"))) {
+            List<UserDto> userDtoList = getUserDtoList(getUserList());
+            model.addAttribute("users", userDtoList);
+            model.addAttribute("userId", getCurrentlyUser().getId());
+            return "userList";
+        } else {
+            String message = "You are haven't permissions";
+            model.addAttribute("errorMessage", message);
+            return "error";
+        }
 
-        }*/
-        List<UserDto> userDtoList = getUserDtoList(getUserList());
-        model.addAttribute("users", userDtoList);
-        model.addAttribute("userId", getCurrentlyUser().getId());
-        return "userList";
     }
 
     public String getUserExpenses(Model model) {
-        //TODO: корректно вытаскивать пользователя
         User user = getCurrentlyUser();
+        model.addAttribute("expenseSum", expenseService.getSumOfExpense(
+                expenseService.getExpenseDtoList(expenseService.getExpenseList(getCurrentlyUser().getId()))));
+        model.addAttribute("averageExpense", expenseService.getAverageExpense(
+                expenseService.getExpenseDtoList(expenseService.getExpenseList(getCurrentlyUser().getId()))));
         model.addAttribute("user", user);
         model.addAttribute("userId", getCurrentlyUser().getId());
-        model.addAttribute("expenses", expenseService.getExpenseDtoList(expenseService.getExpenseList(getCurrentlyUser().getId())));
+        model.addAttribute("expenses",
+                expenseService.getExpenseDtoList(expenseService.getExpenseList(getCurrentlyUser().getId())));
         return "userExpense";
     }
 
     public String userEdit(User user, Model model) {
-        List<ExpenseDto> expenseDtoList = expenseService.getExpenseDtoList(expenseRepo.findAllByUserId(getCurrentlyUser().getId()));
+        List<ExpenseDto> expenseDtoList =
+                expenseService.getExpenseDtoList(expenseRepo.findAllByUserId(getCurrentlyUser().getId()));
+
+        Set<Role> roleSelected = user.getRoles();
+
+        //Set<String> roles = new HashSet<>();
+        Set<String> roles= Arrays.stream(Role.values())
+                .map(Role::name)
+                .collect(Collectors.toSet());
+
+        /*user.getRoles().clear();
+
+        for (String key : form.keySet()) {
+            if (roles.contains(key)) {
+                user.getRoles().add(Role.valueOf(key));
+            }
+        }*/
+
+        model.addAttribute("roles", roles);
         model.addAttribute("user", user);
         model.addAttribute("userId", getCurrentlyUser().getId());
         model.addAttribute("expenses", expenseDtoList);
+
         return "userEdit";
     }
 
-    public String userUpdate(long id, String userName, String userRole, Model model) throws Exception {
+    public String userUpdate(long id, String userName, String userRole, Map<String, String> form, Model model) throws Exception {
 
         User updatedUser = userRepo.findById(id).orElseThrow(()->
                 new Exception("User not found - " + id));
-        //updatedUser.setId(id);
+
+       Set<String> roles= Arrays.stream(Role.values())
+                .map(Role::name)
+                .collect(Collectors.toSet());
+
+        updatedUser.getRoles().clear();
+
+        for (String key : form.keySet()) {
+            if (roles.contains(key)) {
+                updatedUser.getRoles().add(Role.valueOf(key));
+            }
+        }
+
         updatedUser.setUsername(userName);
         //updatedUser.setRoles(userRole);
         userRepo.save(updatedUser);
@@ -78,7 +118,6 @@ public class UserService  implements UserDetailsService {
             Double price,
             String comment
     ) {
-        //TODO: are this method correct?
         return expenseService.addExpense(description,comment, price, getCurrentlyUser().getId());
     }
 
@@ -107,7 +146,6 @@ public class UserService  implements UserDetailsService {
     }
 
     public String removeUser(Long id, Model model) {
-        //TODO: может лучше сделать метод в репо deleteByUserId?
         List<Expense> expenses = expenseRepo.findAllByUserId(id);
         for (Expense e: expenses) {
             expenseRepo.deleteById(e.getId());
@@ -115,7 +153,8 @@ public class UserService  implements UserDetailsService {
         userRepo.deleteById(id);
 
         model.addAttribute("userId", getCurrentlyUser().getId());
-        model.addAttribute("expenses", expenseService.getExpenseDtoList(expenseService.getExpenseList(getCurrentlyUser().getId())));
+        model.addAttribute("expenses", expenseService.getExpenseDtoList(
+                expenseService.getExpenseList(getCurrentlyUser().getId())));
         return "userExpense";
     }
 

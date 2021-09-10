@@ -26,7 +26,7 @@ public class Expense {
         this.userId = userId;
     }
 
-    //TODO: foreihg key
+    //TODO: foreign key
     private Long userId;
 
     /*public User getUser() {

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Error page</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header><br>
+<h1>Something went wrong!</h1>
+<h2>Our specialists are already dealing with this issue, sorry!</h2>
+<div th:text="${errorMessage}"></div>
+<!--<style>
+    body {
+        margin: 20px;
+    }
+</style>-->
+</body>
+</html>
