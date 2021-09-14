@@ -6,6 +6,7 @@ import com.moshna.traker.repo.ExpenseRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -13,23 +14,19 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ExpenseService {
 
-    @Autowired
     private final ExpenseRepo expenseRepo;
 
-    public ExpenseService(ExpenseRepo expenseRepo) {
-        this.expenseRepo = expenseRepo;
-    }
-
-    public String addExpense(String description, String comment, double price, long userId) {
+    public String addExpense(String description, String comment, BigDecimal price, long userId) {
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
         String timeString = time.toString();
         String timeToExpense = timeString.split("\\.")[0];
 
         //TODO: check for double
-        Expense expense = new Expense(date.toString(), timeToExpense, description, price, comment, userId);
+        Expense expense = new Expense(date, time, description, price, comment, userId);
         expenseRepo.save(expense);
 
         //TODO: return to page where expense added succsesfully
@@ -43,7 +40,7 @@ public class ExpenseService {
                 for (Expense expense: expenseList) {
                     expenseDtoList.add(new ExpenseDto(expense.getId(),
                         expense.getDate(), expense.getTime(), expense.getDescription(),
-                        expense.getPrice(), expense.getComment(), expense.getUserId()));
+                        expense.getPrice(), expense.getComment(), expense.getUserId()));//TODO: do mapper
             }
             return expenseDtoList;
         } catch (Exception e) {
@@ -65,7 +62,7 @@ public class ExpenseService {
     public float getSumOfExpense(List<ExpenseDto> expenseDtoList) {
         float result = 0;
         for (ExpenseDto expenseDto: expenseDtoList) {
-            result += expenseDto.getPrice();
+            result += expenseDto.getPrice().floatValue();
         }
         return result;
     }

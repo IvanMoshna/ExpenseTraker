@@ -1,8 +1,18 @@
 package com.moshna.traker.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Expense {
 
     @Id
@@ -18,29 +28,11 @@ public class Expense {
     @JoinColumn(name = "user_id")
     private User user;*/
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
     //TODO: foreign key
     private Long userId;
 
-    /*public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }*/
-
-    public Expense() {
-    }
-
-    public Expense(String date, String time, String description, double price, String comment) {
+   /* //TODO: remove after add userId
+    public Expense(LocalDate date, LocalTime time, String description, BigDecimal price, String comment) {
         this.date = date;
         this.time = time;
         this.description = description;
@@ -48,16 +40,17 @@ public class Expense {
         this.comment = comment;
     }
 
-    public Expense(Integer id, String date, String time, String description, double price, String comment) {
+    //TODO: remove after add userId
+    public Expense(Integer id, LocalDate date, LocalTime time, String description, BigDecimal price, String comment) {
         this.id = id;
         this.date = date;
         this.time = time;
         this.description = description;
         this.price = price;
         this.comment = comment;
-    }
+    }*/
 
-    public Expense(String date, String time, String description, double price, String comment, Long userId) {
+    public Expense(LocalDate date, LocalTime time, String description, BigDecimal price, String comment, Long userId) {
         this.id = id;
         this.date = date;
         this.time = time;
@@ -65,53 +58,5 @@ public class Expense {
         this.price = price;
         this.comment = comment;
         this.userId = userId;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
     }
 }

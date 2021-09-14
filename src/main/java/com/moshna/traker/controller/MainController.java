@@ -3,6 +3,7 @@ package com.moshna.traker.controller;
 import com.moshna.traker.model.User;
 import com.moshna.traker.repo.ExpenseRepo;
 import com.moshna.traker.repo.UserRepo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,12 +16,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class MainController {
 
-    @Autowired
-    UserRepo userRepo;
-    @Autowired
-    ExpenseRepo expenseRepo;
+
+    private final UserRepo userRepo;
+    private final ExpenseRepo expenseRepo;
 
     @GetMapping("/")
     public String home(@AuthenticationPrincipal User userN,

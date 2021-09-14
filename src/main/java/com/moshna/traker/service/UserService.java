@@ -7,7 +7,7 @@ import com.moshna.traker.model.Role;
 import com.moshna.traker.model.User;
 import com.moshna.traker.repo.ExpenseRepo;
 import com.moshna.traker.repo.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,17 +17,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService  implements UserDetailsService {
-    @Autowired
-    private UserRepo userRepo;
-    @Autowired
-    ExpenseRepo expenseRepo;
-    @Autowired
-    ExpenseService expenseService;
+
+    private final UserRepo userRepo;
+    private final ExpenseRepo expenseRepo;
+    private final ExpenseService expenseService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -68,7 +67,7 @@ public class UserService  implements UserDetailsService {
                 expenseService.getExpenseDtoList(expenseRepo.findAllByUserId(getCurrentlyUser().getId()));
 
         Set<Role> roleSelected = user.getRoles();
-
+        //TODO: получение ролей
         //Set<String> roles = new HashSet<>();
         Set<String> roles= Arrays.stream(Role.values())
                 .map(Role::name)
@@ -115,7 +114,7 @@ public class UserService  implements UserDetailsService {
 
     public String addExpense(
             String description,
-            Double price,
+            BigDecimal price,
             String comment
     ) {
         return expenseService.addExpense(description,comment, price, getCurrentlyUser().getId());
@@ -130,7 +129,7 @@ public class UserService  implements UserDetailsService {
     }
 
     public String expenseUpdate(long id, String description, String comment,
-                                float price, Model model) throws Exception {
+                                BigDecimal price, Model model) throws Exception {
         Expense expense = expenseRepo.findById(id).orElseThrow(()->new Exception("Expense not found - " + id));
 
         expense.setDescription(description);
@@ -140,7 +139,6 @@ public class UserService  implements UserDetailsService {
 
         model.addAttribute("expenses", expenseRepo.findAll());
         model.addAttribute("userId", getCurrentlyUser().getId());
-        //TODO: how to redirect in normal page?
         getUserExpenses(model);
         return "userExpense";
     }
@@ -193,14 +191,10 @@ public class UserService  implements UserDetailsService {
     }
 
     public List<User> getUserList() {
-        try {
             Iterable<User> users = userRepo.findAll();
             List<User> userList = new ArrayList<>();
             users.forEach(user -> userList.add(user));
             return userList;
-        } catch (Exception e) {
-            return Collections.emptyList();
-        }
     }
 
 

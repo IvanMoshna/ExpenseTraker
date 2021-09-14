@@ -37,7 +37,7 @@
             <td><div th:text="${expense.getDescription()}"></div></td>
             <td><div th:text="${expense.getPrice()}"></div></td>
             <td><div th:text="${expense.getComment()}"></div></td>
-            <td><a th:href="'/user/' + ${userId} + '/expenses/' + ${expense.getId()}">Edit</a></td>
+            <td><a th:href="'/users/' + ${userId} + '/expenses/' + ${expense.getId()}">Edit</a></td>
         </tr>
     </ul>
     </tbody>
@@ -59,7 +59,7 @@
     <p th:case="*">${user.getRoles()}</p>
 </div>
 <div th:text="${user.getRoles()}"></div>-->
-<a th:href="@{/user}">User List</a></p>
+<a th:href="@{/users}">User List</a></p>
 
 </body>
 </html>

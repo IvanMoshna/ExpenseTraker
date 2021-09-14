@@ -5,25 +5,21 @@ import com.moshna.traker.repo.ExpenseRepo;
 import com.moshna.traker.repo.UserRepo;
 import com.moshna.traker.service.ExpenseService;
 import com.moshna.traker.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    UserRepo userRepo;
-    @Autowired
-    ExpenseRepo expenseRepo;
-    @Autowired
-    UserService userService;
-    @Autowired
-    ExpenseService expenseService;
+
+    private final UserService userService;
 
     @GetMapping
     public String userList(Model model) {
@@ -58,9 +54,11 @@ public class UserController {
     @PostMapping("/addExpenseToUser")
     public String addExpenseToUser(
                              @RequestParam String description,
-                             @RequestParam Double price,
+                             @RequestParam BigDecimal price,
                              @RequestParam String comment
                              ) {
+        //TODO: {userId}/expense
+        //TODO: сделать возможность добавления и с админа любому юзеру
         return userService.addExpense(description,price, comment);
     }
 
@@ -78,7 +76,7 @@ public class UserController {
     @PostMapping("{user}/expenses/{id}/update")
     public String updateExpense(@PathVariable long id,
                                 @RequestParam String description,
-                                @RequestParam float price,
+                                @RequestParam BigDecimal price,
                                 @RequestParam String comment,
                                 Model model) throws Exception {
         return userService.expenseUpdate(id, description, comment, price, model);
