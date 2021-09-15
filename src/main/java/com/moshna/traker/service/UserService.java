@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -88,7 +89,7 @@ public class UserService  implements UserDetailsService {
         return "userEdit";
     }
 
-    public String userUpdate(long id, String userName, Map<String, String> form, Model model)
+    public String userUpdate(Long id, String userName, Map<String, String> form, Model model)
             throws Exception {
 
         User updatedUser = userRepo.findById(id).orElseThrow(()->
@@ -115,12 +116,14 @@ public class UserService  implements UserDetailsService {
             Long id,
             String description,
             BigDecimal price,
-            String comment
+            String comment,
+            Model model
     ) {
-        return expenseService.addExpense(description,comment, price, id);
+        expenseService.addExpense(description,comment, price, id);
+        return getUserExpenses(model);
     }
 
-    public String userExpenseDetails(long id, Model model) throws Exception {
+    public String userExpenseDetails(Long id, Model model) throws Exception {
 
         Expense expense = expenseRepo.findById(id).orElseThrow(()->new Exception("Expense not found - " + id));
         model.addAttribute("userId", getCurrentlyUser().getId());
@@ -128,7 +131,7 @@ public class UserService  implements UserDetailsService {
         return "expense_details";
     }
 
-    public String expenseUpdate(long id, String description, String comment,
+    public String expenseUpdate(Long id, String description, String comment,
                                 BigDecimal price, Model model) throws Exception {
         Expense expense = expenseRepo.findById(id).orElseThrow(()->new Exception("Expense not found - " + id));
 
@@ -159,11 +162,23 @@ public class UserService  implements UserDetailsService {
         return "userExpense";
     }
 
-    public String removeExpense(long id, Model model) {
+    public String removeExpense(Long id, Model model) {
         expenseRepo.deleteById(id);
 
-        model.addAttribute("userId", getCurrentlyUser().getId());
-        model.addAttribute("expenses", expenseService.getExpenseDtoList(expenseService.getExpenseList(getCurrentlyUser().getId())));
+        model.addAttribute("userId", id);
+        model.addAttribute("expenses", expenseService.getExpenseDtoList(
+                expenseService.getExpenseList(getCurrentlyUser().getId())));
+        return "userExpense";
+    }
+
+    public String filterByDates(Long id, String fromDate, String toDate, Model model) {
+        List<ExpenseDto> expenseFilteredDtoList = expenseService.filterByDates(id, fromDate, toDate);
+        model.addAttribute("expenseSum", expenseService.getSumOfExpense(
+                expenseFilteredDtoList));
+        model.addAttribute("averageExpense", expenseService.getAverageExpense(
+                expenseFilteredDtoList));
+        model.addAttribute("expenses", expenseFilteredDtoList);
+        model.addAttribute("userId",id);
         return "userExpense";
     }
 

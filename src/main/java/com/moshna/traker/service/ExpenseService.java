@@ -21,13 +21,13 @@ public class ExpenseService {
 
     private final ExpenseRepo expenseRepo;
 
-    public String addExpense(String description, String comment, BigDecimal price, long userId) {
+    public void addExpense(String description, String comment, BigDecimal price, long userId) {
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
 
         Expense expense = new Expense(date, time, description, price, comment, userId);
         expenseRepo.save(expense);
-        return "userExpense";
+        //return "userExpense";
     }
 
     public List<ExpenseDto> getExpenseDtoList(List<Expense> expenseList) {
@@ -66,12 +66,12 @@ public class ExpenseService {
         else return getSumOfExpense(expenseDtoList)/expenseDtoList.size();
     }
     //TODO: check that we are got date or create a calendar
-    public List<ExpenseDto> filterByDates(Long id, LocalDate fromDate, LocalDate toDate, Model model) {
+    public List<ExpenseDto> filterByDates(Long id, String fromDate, String toDate) {
         List<ExpenseDto> expenseAllDtoList = getExpenseDtoList(getExpenseList(id));
         List<ExpenseDto> expenseDtoFilteredList = new ArrayList<>();
         for (ExpenseDto expenseDto: expenseAllDtoList) {
-            if(expenseDto.getDate().isAfter(fromDate) &&
-                    expenseDto.getDate().isBefore(toDate)) {
+            if(expenseDto.getDate().isAfter(LocalDate.parse(fromDate)) &&
+                    expenseDto.getDate().isBefore(LocalDate.parse(toDate))) {
                 expenseDtoFilteredList.add(expenseDto);
             }
         }

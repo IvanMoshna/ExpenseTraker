@@ -13,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -54,24 +56,29 @@ public class UserController {
                              @PathVariable(value = "user") long id,//current user id
                              @RequestParam String description,
                              @RequestParam BigDecimal price,
-                             @RequestParam String comment
+                             @RequestParam String comment,
+                             Model model
                              ) {
-        return userService.addExpense(id, description,price, comment);
+        return userService.addExpense(id, description,price, comment, model);
     }
 
     @PostMapping("{userId}/remove")
-    public String removeUser(@PathVariable(value = "user") long id,
+    public String removeUser(
+                                @PathVariable(value = "user") long id,
                                 Model model) {
         return userService.removeUser(id, model);
     }
 
     @GetMapping("{userId}/expenses/{expenseId}")
-    public String userExpenseDetails(@PathVariable(value = "expenseId") long idExpense, Model model) throws Exception {
+    public String userExpenseDetails(
+                                     @PathVariable(value = "expenseId") long idExpense,
+                                     Model model) throws Exception {
         return userService.userExpenseDetails(idExpense, model);
     }
 
     @PostMapping("{userId}/expenses/{expenseId}/update")
-    public String updateExpense(@PathVariable(value = "expenseId") long expenseId,
+    public String updateExpense(
+                                @PathVariable(value = "expenseId") long expenseId,
                                 @RequestParam String description,
                                 @RequestParam BigDecimal price,
                                 @RequestParam String comment,
@@ -85,10 +92,12 @@ public class UserController {
         return userService.removeExpense(expenseId, model);
     }
 
-    @GetMapping("")
-    public String filter() {
-
-        return "";
+    @PostMapping("{userId}/filterByDates")
+    public String filterByDates(
+                                  @PathVariable(value = "userId") long id,
+                                  @RequestParam String fromDate,
+                                  @RequestParam String toDate,
+                                  Model model) {
+        return userService.filterByDates(id, fromDate, toDate, model);
     }
-
 }
