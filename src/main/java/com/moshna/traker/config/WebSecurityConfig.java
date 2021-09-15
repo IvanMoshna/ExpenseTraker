@@ -16,8 +16,6 @@ import javax.sql.DataSource;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
-    @Autowired
-    private UserService userService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -51,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
-                .passwordEncoder(NoOpPasswordEncoder.getInstance())
+                .passwordEncoder(NoOpPasswordEncoder.getInstance()) //TODO: add pass encoder
                 .usersByUsernameQuery("select username, password,'true' from usr where username=?")
                 .authoritiesByUsernameQuery("select u.username, ur.roles from usr u inner join user_role ur on u.id = ur.user_id where u.username=?");
         /*auth.userDetailsService(userService)

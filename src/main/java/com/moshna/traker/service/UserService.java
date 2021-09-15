@@ -2,6 +2,7 @@ package com.moshna.traker.service;
 
 import com.moshna.traker.dto.ExpenseDto;
 import com.moshna.traker.dto.UserDto;
+import com.moshna.traker.mapper.UserMapping;
 import com.moshna.traker.model.Expense;
 import com.moshna.traker.model.Role;
 import com.moshna.traker.model.User;
@@ -23,6 +24,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserService  implements UserDetailsService {
 
     private final UserRepo userRepo;
@@ -34,10 +36,9 @@ public class UserService  implements UserDetailsService {
         return userRepo.findByUsername(username);
     }
 
-    //@Secured("ROLE_ADMIN")
     public String getUserList(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("USER")) ||
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(/*Role.ADMIN.name()*/"USER")) || //TODO: использовать Role.USER.name()
                 auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("MANAGER"))) {
             List<UserDto> userDtoList = getUserDtoList(getUserList());
             model.addAttribute("users", userDtoList);
@@ -186,7 +187,7 @@ public class UserService  implements UserDetailsService {
     public List<UserDto> getUserDtoList(List<User> userList) {
         List<UserDto> userDtoList = new ArrayList<>();
         for (User user: userList) {
-            userDtoList.add(new UserDto(user.getId(), user.getUsername(), user.getPassword(), user.getRoles()));
+            userDtoList.add(UserMapping.toUserDto(user));
         }
         return userDtoList;
     }

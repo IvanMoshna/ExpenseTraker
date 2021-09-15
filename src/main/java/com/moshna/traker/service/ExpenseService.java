@@ -1,9 +1,10 @@
 package com.moshna.traker.service;
 
 import com.moshna.traker.dto.ExpenseDto;
+import com.moshna.traker.mapper.ExpenseMapping;
 import com.moshna.traker.model.Expense;
 import com.moshna.traker.repo.ExpenseRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -32,9 +33,7 @@ public class ExpenseService {
         try {
                 List<ExpenseDto> expenseDtoList = new ArrayList<>();
                 for (Expense expense: expenseList) {
-                    expenseDtoList.add(new ExpenseDto(expense.getId(),
-                        expense.getDate(), expense.getTime(), expense.getDescription(),
-                        expense.getPrice(), expense.getComment(), expense.getUserId()));//TODO: do mapper
+                    expenseDtoList.add(ExpenseMapping.toExpenseDTO(expense));
             }
             return expenseDtoList;
         } catch (Exception e) {

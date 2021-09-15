@@ -1,8 +1,6 @@
 package com.moshna.traker.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -13,20 +11,18 @@ import java.time.LocalTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Expense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String date;
-    private String time;
+    private LocalDate date;
+    private LocalTime time;
     private String description;
-    private double price;
+    private BigDecimal price;
     private String comment;
-
-    /*@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;*/
 
     //TODO: foreign key
     private Long userId;

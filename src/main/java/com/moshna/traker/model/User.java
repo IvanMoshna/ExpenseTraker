@@ -1,8 +1,6 @@
 package com.moshna.traker.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,6 +12,8 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name ="usr")
 public class User implements UserDetails {
     @Id
@@ -21,11 +21,6 @@ public class User implements UserDetails {
     private Long id;
     private String username;
     private String password;
-
-    /*@OneToOne(mappedBy = "usr")
-    private Expense expense;*/
-
-
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))

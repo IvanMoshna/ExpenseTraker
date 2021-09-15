@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/user")
+@RequiredArgsConstructor
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
@@ -27,10 +28,8 @@ public class UserController {
         return userService.getUserList(model);
     }
 
-    @GetMapping("{user}/expenses")
-    public String userExpense(@AuthenticationPrincipal User userAuth,
-                              Model model) {
-        //userAuth is null
+    @GetMapping("{userId}/expenses")
+    public String userExpense(Model model) {
         return userService.getUserExpenses(model);
     }
 
@@ -71,8 +70,8 @@ public class UserController {
         return userService.userExpenseDetails(idExpense, model);
     }
 
-    @PostMapping("{user}/expenses/{id}/update")
-    public String updateExpense(@PathVariable long id,
+    @PostMapping("{userId}/expenses/{expenseId}/update")
+    public String updateExpense(@PathVariable(value = "expenseId") long expenseId,
                                 @RequestParam String description,
                                 @RequestParam BigDecimal price,
                                 @RequestParam String comment,
