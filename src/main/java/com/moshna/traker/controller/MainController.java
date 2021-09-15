@@ -24,9 +24,7 @@ public class MainController {
     private final ExpenseRepo expenseRepo;
 
     @GetMapping("/")
-    public String home(@AuthenticationPrincipal User userN,
-                       Model model) {
-        //TODO: can i get user id correctly?
+    public String home(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = "";
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
@@ -40,9 +38,7 @@ public class MainController {
                 break;
             }
         }
-        //TODO: if currentUser is empty do exception
         Long userId = currentUser.getId();
-        model.addAttribute("expenses", expenseRepo.findAll());
         model.addAttribute("userId", userId.toString());
         return "/home";
     }

@@ -9,33 +9,17 @@
 </head>
 <body>
 <div class="container order-md-2 mt-5 mb-5">
-    <form th:action="'/user/' + ${user.getId()} + '/update'" method="post" enctype="multipart/form-data">
+    <form th:action="'/users/' + ${user.getId()} + '/update'" method="post" enctype="multipart/form-data">
         <label class="form-label">Id</label>
-        <input type="text" name="userId" th:value="${user.getId()}" class="form-control" required><br>
+        <input type="number" name="userId" th:value="${user.getId()}" class="form-control" required><br>
         <label class="form-label">Username</label>
         <input type="text" name="userName" th:value="${user.getUsername()}" class="form-control" required><br>
         <label class="form-label">Role</label>
-        <!--<input type="text" name="userRole" th:value="${user.getRoles()}" class="form-control"><br>-->
-        <!--<div>
-            <select name="roles" class="form-control" required>
 
-                <option th:text="${user.getRoles()}"></option>
-                <option th:each="role : ${roles}"
-                        th:text="${role}">
-                </option>
-            </select>
-        </div>-->
-
-        <tr>
-            <td></td>
-            <td>
-                <th:block th:each="role : ${roles}">
-                    <input type="checkbox"/>
-                    <label th:text="${role}" th:checked="${isChecked}" ></label>
-                    <!--<label><input type="checkbox" name="${role}" ${user.roles?seq_contains(role)?string("checked", "")}>${role}</label>-->
-                </th:block>
-            </td>
-        </tr>
+        <div th:each="role: ${allRoles}">
+                <input type="checkbox" th:name="${role}" th:checked="${roles.contains(role)}" th:value="${role}"/>
+                <td th:text="${role}"></td>
+        </div>
 
         <table class="table">
             <thead>
@@ -55,13 +39,22 @@
                     <td><div th:text="${expense.getDescription()}"></div></td>
                     <td><div th:text="${expense.getPrice()}"></div></td>
                     <td><div th:text="${expense.getComment()}"></div></td>
-                    <td><a th:href="'/user/' + ${userId} + '/expenses/' + ${expense.getId()}">Edit</a></td>
+                    <td><a th:href="'/users/' + ${userId} + '/expenses/' + ${expense.getId()}">Edit</a></td>
                 </tr>
             </ul>
             </tbody>
         </table>
         <button type="submit" class="btn">Update</button>
     </form>
+    <div class="container order-md-2 mt-5 mb-5">
+        <form th:action="'/users/' + ${user.getId()} + '/expense'" method="post" enctype="multipart/form-data">
+            <input type="text" name="description" placeholder="Add description" class="form-control" required/><br>
+            <input type="text" name="price" placeholder="Add price" class="form-control" required/><br>
+            <input type="text" name="comment" placeholder="Add comment" class="form-control" required/><br>
+
+            <button type="submit" class="btn btn-secondary">Add</a></button>
+        </form>
+    </div>
     <form th:action="'/users/' + ${user.getId()} + '/remove'" method="post">
         <button type="submit" class="btn">Delete</button>
     </form>

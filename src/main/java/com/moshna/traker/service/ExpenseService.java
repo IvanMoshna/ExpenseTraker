@@ -22,15 +22,9 @@ public class ExpenseService {
     public String addExpense(String description, String comment, BigDecimal price, long userId) {
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
-        String timeString = time.toString();
-        String timeToExpense = timeString.split("\\.")[0];
 
-        //TODO: check for double
         Expense expense = new Expense(date, time, description, price, comment, userId);
         expenseRepo.save(expense);
-
-        //TODO: return to page where expense added succsesfully
-        //return "redirect: /user/"+ userId + "/expenses";
         return "userExpense";
     }
 

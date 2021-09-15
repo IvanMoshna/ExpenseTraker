@@ -31,25 +31,6 @@ public class Expense {
     //TODO: foreign key
     private Long userId;
 
-   /* //TODO: remove after add userId
-    public Expense(LocalDate date, LocalTime time, String description, BigDecimal price, String comment) {
-        this.date = date;
-        this.time = time;
-        this.description = description;
-        this.price = price;
-        this.comment = comment;
-    }
-
-    //TODO: remove after add userId
-    public Expense(Integer id, LocalDate date, LocalTime time, String description, BigDecimal price, String comment) {
-        this.id = id;
-        this.date = date;
-        this.time = time;
-        this.description = description;
-        this.price = price;
-        this.comment = comment;
-    }*/
-
     public Expense(LocalDate date, LocalTime time, String description, BigDecimal price, String comment, Long userId) {
         this.id = id;
         this.date = date;

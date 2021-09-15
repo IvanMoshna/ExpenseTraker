@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -35,41 +36,38 @@ public class UserController {
 
     @GetMapping("{user}")
     public String userEdit(
-            @PathVariable User user,
-
-            Model model) {
+                           @PathVariable User user,
+                           Model model) {
         return userService.userEdit(user, model);
     }
 
-    @PostMapping("{user}/update")
+    @PostMapping("{userId}/update")
     public String userUpdate(
-                            @PathVariable(value = "user") long id,
+                            @PathVariable(value = "userId") long id,
                             @RequestParam String userName,
-                            @RequestParam String userRole,
                             @RequestParam Map<String, String> form,
                             Model model) throws Exception {
-        return userService.userUpdate(id, userName, userRole, form, model);
+        return userService.userUpdate(id, userName, form, model);
     }
 
-    @PostMapping("/addExpenseToUser")
+    @PostMapping("{user}/expense")
     public String addExpenseToUser(
+                             @PathVariable(value = "user") long id,//current user id
                              @RequestParam String description,
                              @RequestParam BigDecimal price,
                              @RequestParam String comment
                              ) {
-        //TODO: {userId}/expense
-        //TODO: сделать возможность добавления и с админа любому юзеру
-        return userService.addExpense(description,price, comment);
+        return userService.addExpense(id, description,price, comment);
     }
 
-    @PostMapping("{user}/remove")
+    @PostMapping("{userId}/remove")
     public String removeUser(@PathVariable(value = "user") long id,
                                 Model model) {
         return userService.removeUser(id, model);
     }
 
-    @GetMapping("{user}/expenses/{id}")
-    public String userExpenseDetails(@PathVariable(value = "id") long idExpense, Model model) throws Exception {
+    @GetMapping("{userId}/expenses/{expenseId}")
+    public String userExpenseDetails(@PathVariable(value = "expenseId") long idExpense, Model model) throws Exception {
         return userService.userExpenseDetails(idExpense, model);
     }
 
@@ -79,12 +77,12 @@ public class UserController {
                                 @RequestParam BigDecimal price,
                                 @RequestParam String comment,
                                 Model model) throws Exception {
-        return userService.expenseUpdate(id, description, comment, price, model);
+        return userService.expenseUpdate(expenseId, description, comment, price, model);
     }
 
-    @PostMapping("{user}/expenses/{id}/remove")
-    public String removeExpense(@PathVariable long id,
+    @PostMapping("{userId}/expenses/{expenseId}/remove")
+    public String removeExpense(@PathVariable(value = "expenseId") long expenseId,
                                 Model model) throws Exception {
-        return userService.removeExpense(id, model);
+        return userService.removeExpense(expenseId, model);
     }
 }

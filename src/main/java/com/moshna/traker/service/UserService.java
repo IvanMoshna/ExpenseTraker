@@ -8,6 +8,7 @@ import com.moshna.traker.model.User;
 import com.moshna.traker.repo.ExpenseRepo;
 import com.moshna.traker.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,6 +34,7 @@ public class UserService  implements UserDetailsService {
         return userRepo.findByUsername(username);
     }
 
+    //@Secured("ROLE_ADMIN")
     public String getUserList(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("USER")) ||
@@ -64,32 +66,29 @@ public class UserService  implements UserDetailsService {
 
     public String userEdit(User user, Model model) {
         List<ExpenseDto> expenseDtoList =
-                expenseService.getExpenseDtoList(expenseRepo.findAllByUserId(getCurrentlyUser().getId()));
+                expenseService.getExpenseDtoList(expenseRepo.findAllByUserId(user.getId()));
 
         Set<Role> roleSelected = user.getRoles();
-        //TODO: получение ролей
-        //Set<String> roles = new HashSet<>();
+
+        List<String> roleSelectedList = new ArrayList<>();
+        for (Role role: roleSelected) {
+            roleSelectedList.add(role.name());
+        }
         Set<String> roles= Arrays.stream(Role.values())
                 .map(Role::name)
                 .collect(Collectors.toSet());
 
-        /*user.getRoles().clear();
-
-        for (String key : form.keySet()) {
-            if (roles.contains(key)) {
-                user.getRoles().add(Role.valueOf(key));
-            }
-        }*/
-
-        model.addAttribute("roles", roles);
+        model.addAttribute("roles", roleSelectedList);
         model.addAttribute("user", user);
         model.addAttribute("userId", getCurrentlyUser().getId());
         model.addAttribute("expenses", expenseDtoList);
+        model.addAttribute("allRoles", roles);
 
         return "userEdit";
     }
 
-    public String userUpdate(long id, String userName, String userRole, Map<String, String> form, Model model) throws Exception {
+    public String userUpdate(long id, String userName, Map<String, String> form, Model model)
+            throws Exception {
 
         User updatedUser = userRepo.findById(id).orElseThrow(()->
                 new Exception("User not found - " + id));
@@ -101,23 +100,23 @@ public class UserService  implements UserDetailsService {
         updatedUser.getRoles().clear();
 
         for (String key : form.keySet()) {
-            if (roles.contains(key)) {
-                updatedUser.getRoles().add(Role.valueOf(key));
+            if (roles.contains(form.get(key))) {
+                updatedUser.getRoles().add(Role.valueOf(form.get(key)));
             }
         }
 
         updatedUser.setUsername(userName);
-        //updatedUser.setRoles(userRole);
         userRepo.save(updatedUser);
         return "userExpense";
     }
 
     public String addExpense(
+            Long id,
             String description,
             BigDecimal price,
             String comment
     ) {
-        return expenseService.addExpense(description,comment, price, getCurrentlyUser().getId());
+        return expenseService.addExpense(description,comment, price, id);
     }
 
     public String userExpenseDetails(long id, Model model) throws Exception {
@@ -132,12 +131,15 @@ public class UserService  implements UserDetailsService {
                                 BigDecimal price, Model model) throws Exception {
         Expense expense = expenseRepo.findById(id).orElseThrow(()->new Exception("Expense not found - " + id));
 
+        List<ExpenseDto> expenseDtoList =
+                expenseService.getExpenseDtoList(expenseRepo.findAllByUserId(getCurrentlyUser().getId()));
+
         expense.setDescription(description);
         expense.setComment(comment);
         expense.setPrice(price);
         expenseRepo.save(expense);
 
-        model.addAttribute("expenses", expenseRepo.findAll());
+        model.addAttribute("expenses", expenseDtoList);
         model.addAttribute("userId", getCurrentlyUser().getId());
         getUserExpenses(model);
         return "userExpense";
@@ -178,7 +180,6 @@ public class UserService  implements UserDetailsService {
                 break;
             }
         }
-        //TODO: if currentUser is empty do exception
         return  currentUser;
     }
 
