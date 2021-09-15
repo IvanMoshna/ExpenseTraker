@@ -6,6 +6,7 @@ import com.moshna.traker.model.Expense;
 import com.moshna.traker.repo.ExpenseRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -64,17 +65,23 @@ public class ExpenseService {
         if(expenseDtoList.size() == 0) return 0;
         else return getSumOfExpense(expenseDtoList)/expenseDtoList.size();
     }
-    /*TODO: check that we are got date or create a calendar
-    public String filterByDates(String fromDate, String toDate, Model model) {
-        List<ExpenseDto> expenseAllDtoList = getExpenseDtoList(getExpenseList());
+    //TODO: check that we are got date or create a calendar
+    public List<ExpenseDto> filterByDates(Long id, LocalDate fromDate, LocalDate toDate, Model model) {
+        List<ExpenseDto> expenseAllDtoList = getExpenseDtoList(getExpenseList(id));
         List<ExpenseDto> expenseDtoFilteredList = new ArrayList<>();
         for (ExpenseDto expenseDto: expenseAllDtoList) {
-            if(LocalDate.parse(expenseDto.getDate()).isAfter(LocalDate.parse(fromDate)) &&
-                    LocalDate.parse(expenseDto.getDate()).isBefore(LocalDate.parse(toDate))) {
+            if(expenseDto.getDate().isAfter(fromDate) &&
+                    expenseDto.getDate().isBefore(toDate)) {
                 expenseDtoFilteredList.add(expenseDto);
             }
         }
-        model.addAttribute("expenses", expenseDtoFilteredList);
-        return EXPENSE_PAGE;
-    }*/
+        if(expenseDtoFilteredList.size() == 0){
+            return Collections.emptyList();
+        }
+        else {
+            return expenseDtoFilteredList;
+        }
+        //model.addAttribute("expenses", expenseDtoFilteredList);
+        //return "userExpense";
+    }
 }

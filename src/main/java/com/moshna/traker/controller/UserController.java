@@ -84,4 +84,11 @@ public class UserController {
                                 Model model) throws Exception {
         return userService.removeExpense(expenseId, model);
     }
+
+    @GetMapping("")
+    public String filter() {
+
+        return "";
+    }
+
 }
