@@ -6,7 +6,6 @@ import com.moshna.traker.model.Expense;
 import com.moshna.traker.repo.ExpenseRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -27,7 +26,6 @@ public class ExpenseService {
 
         Expense expense = new Expense(date, time, description, price, comment, userId);
         expenseRepo.save(expense);
-        //return "userExpense";
     }
 
     public List<ExpenseDto> getExpenseDtoList(List<Expense> expenseList) {
@@ -65,7 +63,7 @@ public class ExpenseService {
         if(expenseDtoList.size() == 0) return 0;
         else return getSumOfExpense(expenseDtoList)/expenseDtoList.size();
     }
-    //TODO: check that we are got date or create a calendar
+
     public List<ExpenseDto> filterByDates(Long id, String fromDate, String toDate) {
         List<ExpenseDto> expenseAllDtoList = getExpenseDtoList(getExpenseList(id));
         List<ExpenseDto> expenseDtoFilteredList = new ArrayList<>();
@@ -81,7 +79,5 @@ public class ExpenseService {
         else {
             return expenseDtoFilteredList;
         }
-        //model.addAttribute("expenses", expenseDtoFilteredList);
-        //return "userExpense";
     }
 }

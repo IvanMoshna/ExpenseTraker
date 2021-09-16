@@ -9,7 +9,6 @@ import com.moshna.traker.model.User;
 import com.moshna.traker.repo.ExpenseRepo;
 import com.moshna.traker.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,6 +29,11 @@ public class UserService  implements UserDetailsService {
     private final UserRepo userRepo;
     private final ExpenseRepo expenseRepo;
     private final ExpenseService expenseService;
+
+    public static final String USER_EXPENSE = "userExpense";
+    public static final String USER_DETAILS = "userEdit";
+    public static final String EXPENSE_DETAILS = "expenseDetails";
+    public static final String ERROR = "error";
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -48,7 +51,7 @@ public class UserService  implements UserDetailsService {
         } else {
             String message = "You are haven't permissions";
             model.addAttribute("errorMessage", message);
-            return "error";
+            return ERROR;
         }
 
     }
@@ -63,7 +66,7 @@ public class UserService  implements UserDetailsService {
         model.addAttribute("userId", getCurrentlyUser().getId());
         model.addAttribute("expenses",
                 expenseService.getExpenseDtoList(expenseService.getExpenseList(getCurrentlyUser().getId())));
-        return "userExpense";
+        return USER_EXPENSE;
     }
 
     public String userEdit(User user, Model model) {
@@ -86,7 +89,7 @@ public class UserService  implements UserDetailsService {
         model.addAttribute("expenses", expenseDtoList);
         model.addAttribute("allRoles", roles);
 
-        return "userEdit";
+        return USER_DETAILS;
     }
 
     public String userUpdate(Long id, String userName, Map<String, String> form, Model model)
@@ -109,7 +112,7 @@ public class UserService  implements UserDetailsService {
 
         updatedUser.setUsername(userName);
         userRepo.save(updatedUser);
-        return "userExpense";
+        return USER_EXPENSE;
     }
 
     public String addExpense(
@@ -128,7 +131,7 @@ public class UserService  implements UserDetailsService {
         Expense expense = expenseRepo.findById(id).orElseThrow(()->new Exception("Expense not found - " + id));
         model.addAttribute("userId", getCurrentlyUser().getId());
         model.addAttribute("expense", expense);
-        return "expense_details";
+        return EXPENSE_DETAILS;
     }
 
     public String expenseUpdate(Long id, String description, String comment,
@@ -146,7 +149,7 @@ public class UserService  implements UserDetailsService {
         model.addAttribute("expenses", expenseDtoList);
         model.addAttribute("userId", getCurrentlyUser().getId());
         getUserExpenses(model);
-        return "userExpense";
+        return USER_EXPENSE;
     }
 
     public String removeUser(Long id, Model model) {
@@ -159,7 +162,7 @@ public class UserService  implements UserDetailsService {
         model.addAttribute("userId", getCurrentlyUser().getId());
         model.addAttribute("expenses", expenseService.getExpenseDtoList(
                 expenseService.getExpenseList(getCurrentlyUser().getId())));
-        return "userExpense";
+        return USER_EXPENSE;
     }
 
     public String removeExpense(Long id, Model model) {
@@ -168,7 +171,7 @@ public class UserService  implements UserDetailsService {
         model.addAttribute("userId", id);
         model.addAttribute("expenses", expenseService.getExpenseDtoList(
                 expenseService.getExpenseList(getCurrentlyUser().getId())));
-        return "userExpense";
+        return USER_EXPENSE;
     }
 
     public String filterByDates(Long id, String fromDate, String toDate, Model model) {
@@ -179,7 +182,7 @@ public class UserService  implements UserDetailsService {
                 expenseFilteredDtoList));
         model.addAttribute("expenses", expenseFilteredDtoList);
         model.addAttribute("userId",id);
-        return "userExpense";
+        return USER_EXPENSE;
     }
 
     public User getCurrentlyUser() {
@@ -208,10 +211,14 @@ public class UserService  implements UserDetailsService {
     }
 
     public List<User> getUserList() {
+        try {
             Iterable<User> users = userRepo.findAll();
             List<User> userList = new ArrayList<>();
             users.forEach(user -> userList.add(user));
             return userList;
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
     }
 
 

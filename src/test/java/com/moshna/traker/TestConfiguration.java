@@ -14,12 +14,13 @@ public class TestConfiguration {
     @Bean
     public ExpenseService expenseService() {return new ExpenseService(repoMockExpense()); }
 
-    /*@Bean
-    public UserService userService() {return new UserService(repoMockUser());}*/
+    @Bean
+    public UserService userService() {return new UserService(repoMockUser(), repoMockExpense(), expenseService());}
 
     @Bean
     public ExpenseRepo repoMockExpense() {return Mockito.mock(ExpenseRepo.class);}
 
     @Bean
     public UserRepo repoMockUser() {return Mockito.mock(UserRepo.class);}
+
 }

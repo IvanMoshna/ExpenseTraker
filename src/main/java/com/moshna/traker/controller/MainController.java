@@ -19,9 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MainController {
 
-
     private final UserRepo userRepo;
-    private final ExpenseRepo expenseRepo;
+    public static final String HOME = "home";
 
     @GetMapping("/")
     public String home(Model model) {
@@ -40,6 +39,6 @@ public class MainController {
         }
         Long userId = currentUser.getId();
         model.addAttribute("userId", userId.toString());
-        return "/home";
+        return HOME;
     }
 }

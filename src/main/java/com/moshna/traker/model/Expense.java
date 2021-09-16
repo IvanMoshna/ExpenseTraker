@@ -28,7 +28,6 @@ public class Expense {
     private Long userId;
 
     public Expense(LocalDate date, LocalTime time, String description, BigDecimal price, String comment, Long userId) {
-        this.id = id;
         this.date = date;
         this.time = time;
         this.description = description;
@@ -36,4 +35,6 @@ public class Expense {
         this.comment = comment;
         this.userId = userId;
     }
+
+
 }
