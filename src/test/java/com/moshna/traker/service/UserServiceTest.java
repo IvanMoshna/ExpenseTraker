@@ -32,6 +32,7 @@ public class UserServiceTest {
 
     @Test
     public void loadUserByUsername() {
+        //CastClassException
         User usr = UserUtils.TEST_USER;
         Mockito.when(repoMockUser.findByUsername(usr.getUsername())).thenReturn((User) Collections.singletonList(usr));
 

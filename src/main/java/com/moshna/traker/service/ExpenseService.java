@@ -60,7 +60,7 @@ public class ExpenseService {
     }
 
     public float getAverageExpense(List<ExpenseDto> expenseDtoList) {
-        if(expenseDtoList.size() == 0) return 0;
+        if(expenseDtoList.isEmpty()) return 0;
         else return getSumOfExpense(expenseDtoList)/expenseDtoList.size();
     }
 
@@ -73,7 +73,7 @@ public class ExpenseService {
                 expenseDtoFilteredList.add(expenseDto);
             }
         }
-        if(expenseDtoFilteredList.size() == 0){
+        if(expenseDtoFilteredList.isEmpty()){
             return Collections.emptyList();
         }
         else {

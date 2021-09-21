@@ -8,11 +8,8 @@
           <strong>Expense Tracker</strong><br>
 
       </a>
-      <!--<form th:action="/user/userExpense" method="get">-->
       <form th:action="'/users/' + ${userId} + '/expenses'" method="get">
-<!--
-        <a th:href="'/user/' + ${userId} + '/expenses'">Home</a>
--->
+
         <button type="submit" class="btn">Home</button>
       </form>
       <form th:action="@{/logout}" method="post">

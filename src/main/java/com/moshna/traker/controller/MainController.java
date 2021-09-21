@@ -1,13 +1,10 @@
 package com.moshna.traker.controller;
 
 import com.moshna.traker.model.User;
-import com.moshna.traker.repo.ExpenseRepo;
 import com.moshna.traker.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +20,7 @@ public class MainController {
     public static final String HOME = "home";
 
     @GetMapping("/")
-    public String home(Model model) {
+    public String homePage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = "";
         if (!(authentication instanceof AnonymousAuthenticationToken)) {

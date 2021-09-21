@@ -35,6 +35,9 @@ public class UserService  implements UserDetailsService {
     public static final String EXPENSE_DETAILS = "expenseDetails";
     public static final String ERROR = "error";
 
+    public static final String USER_ID = "userId";
+    public static final String EXPENSES = "expenses";
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepo.findByUsername(username);
@@ -43,10 +46,10 @@ public class UserService  implements UserDetailsService {
     public String getUserList(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(/*Role.ADMIN.name()*/"USER")) || //TODO: использовать Role.USER.name()
-                auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("MANAGER"))) {
+                auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("MANAGER"))) {
             List<UserDto> userDtoList = getUserDtoList(getUserList());
             model.addAttribute("users", userDtoList);
-            model.addAttribute("userId", getCurrentlyUser().getId());
+            model.addAttribute(USER_ID, getCurrentlyUser().getId());
             return "userList";
         } else {
             String message = "You are haven't permissions";
@@ -63,8 +66,8 @@ public class UserService  implements UserDetailsService {
         model.addAttribute("averageExpense", expenseService.getAverageExpense(
                 expenseService.getExpenseDtoList(expenseService.getExpenseList(getCurrentlyUser().getId()))));
         model.addAttribute("user", user);
-        model.addAttribute("userId", getCurrentlyUser().getId());
-        model.addAttribute("expenses",
+        model.addAttribute(USER_ID, getCurrentlyUser().getId());
+        model.addAttribute(EXPENSES,
                 expenseService.getExpenseDtoList(expenseService.getExpenseList(getCurrentlyUser().getId())));
         return USER_EXPENSE;
     }
@@ -85,8 +88,8 @@ public class UserService  implements UserDetailsService {
 
         model.addAttribute("roles", roleSelectedList);
         model.addAttribute("user", user);
-        model.addAttribute("userId", getCurrentlyUser().getId());
-        model.addAttribute("expenses", expenseDtoList);
+        model.addAttribute(USER_ID, getCurrentlyUser().getId());
+        model.addAttribute(EXPENSES, expenseDtoList);
         model.addAttribute("allRoles", roles);
 
         return USER_DETAILS;
@@ -104,11 +107,15 @@ public class UserService  implements UserDetailsService {
 
         updatedUser.getRoles().clear();
 
-        for (String key : form.keySet()) {
-            if (roles.contains(form.get(key))) {
+        for(Map.Entry<String, String> entry: form.entrySet()) {
+            String key = entry.getKey();
+            if(roles.contains(key)) {
                 updatedUser.getRoles().add(Role.valueOf(form.get(key)));
             }
         }
+
+        model.addAttribute(USER_ID, getCurrentlyUser().getId());
+        model.addAttribute(EXPENSES, expenseService.getExpenseDtoList(expenseRepo.findAllByUserId(id)));
 
         updatedUser.setUsername(userName);
         userRepo.save(updatedUser);
@@ -129,8 +136,8 @@ public class UserService  implements UserDetailsService {
     public String userExpenseDetails(Long id, Model model) throws Exception {
 
         Expense expense = expenseRepo.findById(id).orElseThrow(()->new Exception("Expense not found - " + id));
-        model.addAttribute("userId", getCurrentlyUser().getId());
-        model.addAttribute("expense", expense);
+        model.addAttribute(USER_ID, getCurrentlyUser().getId());
+        model.addAttribute(EXPENSES, expense);
         return EXPENSE_DETAILS;
     }
 
@@ -146,8 +153,8 @@ public class UserService  implements UserDetailsService {
         expense.setPrice(price);
         expenseRepo.save(expense);
 
-        model.addAttribute("expenses", expenseDtoList);
-        model.addAttribute("userId", getCurrentlyUser().getId());
+        model.addAttribute(EXPENSES, expenseDtoList);
+        model.addAttribute(USER_ID, getCurrentlyUser().getId());
         getUserExpenses(model);
         return USER_EXPENSE;
     }
@@ -159,8 +166,8 @@ public class UserService  implements UserDetailsService {
         }
         userRepo.deleteById(id);
 
-        model.addAttribute("userId", getCurrentlyUser().getId());
-        model.addAttribute("expenses", expenseService.getExpenseDtoList(
+        model.addAttribute(USER_ID, getCurrentlyUser().getId());
+        model.addAttribute(EXPENSES, expenseService.getExpenseDtoList(
                 expenseService.getExpenseList(getCurrentlyUser().getId())));
         return USER_EXPENSE;
     }
@@ -168,8 +175,8 @@ public class UserService  implements UserDetailsService {
     public String removeExpense(Long id, Model model) {
         expenseRepo.deleteById(id);
 
-        model.addAttribute("userId", id);
-        model.addAttribute("expenses", expenseService.getExpenseDtoList(
+        model.addAttribute(USER_ID, id);
+        model.addAttribute(EXPENSES, expenseService.getExpenseDtoList(
                 expenseService.getExpenseList(getCurrentlyUser().getId())));
         return USER_EXPENSE;
     }
@@ -180,8 +187,8 @@ public class UserService  implements UserDetailsService {
                 expenseFilteredDtoList));
         model.addAttribute("averageExpense", expenseService.getAverageExpense(
                 expenseFilteredDtoList));
-        model.addAttribute("expenses", expenseFilteredDtoList);
-        model.addAttribute("userId",id);
+        model.addAttribute(EXPENSES, expenseFilteredDtoList);
+        model.addAttribute(USER_ID,id);
         return USER_EXPENSE;
     }
 

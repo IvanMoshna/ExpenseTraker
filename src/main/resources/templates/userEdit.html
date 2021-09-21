@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+<header th:insert="blocks/header :: header"></header><br>
 <div class="container order-md-2 mt-5 mb-5">
     <form th:action="'/users/' + ${user.getId()} + '/update'" method="post" enctype="multipart/form-data">
         <label class="form-label">Id</label>
