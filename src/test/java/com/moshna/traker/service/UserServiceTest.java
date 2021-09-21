@@ -31,60 +31,6 @@ public class UserServiceTest {
     private ExpenseRepo repoMockExpense;
 
     @Test
-    public void loadUserByUsername() {
-        //CastClassException
-        User usr = UserUtils.TEST_USER;
-        Mockito.when(repoMockUser.findByUsername(usr.getUsername())).thenReturn((User) Collections.singletonList(usr));
-
-        User user = (User)userService.loadUserByUsername(usr.getUsername());
-
-        Assertions.assertNotNull(user);
-        Assertions.assertEquals(usr.getUsername(), user.getUsername());
-    }
-
-    @Test
-    public void getUserList() {
-
-    }
-
-    @Test
-    public void getUserExpenses() {
-    }
-
-    @Test
-    public void userEdit() {
-    }
-
-    @Test
-    public void userUpdate() {
-    }
-
-    @Test
-    public void addExpense() {
-    }
-
-    @Test
-    public void userExpenseDetails() {
-    }
-
-    @Test
-    public void expenseUpdate() {
-    }
-
-    @Test
-    public void removeUser() {
-    }
-
-    @Test
-    public void removeExpense() {
-
-    }
-
-    @Test
-    public void filterByDates() {
-    }
-
-    @Test
     public void testGetUserDtoList() {
         User user = UserUtils.TEST_USER;
         Mockito.when(repoMockUser.findAll()).thenReturn(Collections.singletonList(user));

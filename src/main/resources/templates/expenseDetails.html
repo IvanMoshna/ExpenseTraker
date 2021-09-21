@@ -10,7 +10,7 @@
 <body>
 <header th:insert="blocks/header :: header"></header><br>
 <div class="container order-md-2 mt-5 mb-5">
-  <form th:action="'/users/' + ${userId} + '/expenses/' + ${expense.id} +'/update'" method="post" enctype="multipart/form-data">
+  <form th:action="'/users/' + ${userId} + '/expenses/' + ${expense.getId()} +'/update'" method="post" enctype="multipart/form-data">
     <label class="form-label">Date:</label>
     <div th:text="${expense.getDate()}"></div><br>
     <label class="form-label">Time:</label>
@@ -23,7 +23,7 @@
     <input type="text" name="comment" th:value="${expense.getComment()}" class="form-control"><br>
     <button type="submit" class="btn">Update</button>
   </form>
-  <form th:action="'/users/' + ${userId} + '/expenses/' + ${expense.id} +'/remove'" method="post">
+  <form th:action="'/users/' + ${userId} + '/expenses/' + ${expense.getId()} +'/remove'" method="post">
     <button type="submit" class="btn">Delete</button>
   </form>
 

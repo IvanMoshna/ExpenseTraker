@@ -25,14 +25,6 @@ public class ExpenseServiceTest {
     @Autowired
     private ExpenseRepo repoMockExpense;
 
-    /*@Test
-    void addExpense() {
-
-        //String result = expenseService.addExpense("testDesc", "testComment", BigDecimal.ONE, 1L);
-        //TODO: how testing that?
-
-    }*/
-
     @Test
     public void getExpenseDtoList() {
         Expense expense = ExpenseUtils.TEST_EXPENSE;
@@ -72,11 +64,4 @@ public class ExpenseServiceTest {
         Assertions.assertEquals(0, expenseList.size());
     }
 
-    @Test
-    public void getSumOfExpense() {
-    }
-
-    @Test
-    public void getAverageExpense() {
-    }
 }

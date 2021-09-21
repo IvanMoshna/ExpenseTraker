@@ -27,6 +27,9 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    public <T> User(String s, String s1, Set<T> emptySet) {
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

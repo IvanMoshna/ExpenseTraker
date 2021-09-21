@@ -1,21 +1,13 @@
 package com.moshna.traker.controller;
 
 import com.moshna.traker.model.User;
-import com.moshna.traker.repo.ExpenseRepo;
-import com.moshna.traker.repo.UserRepo;
-import com.moshna.traker.service.ExpenseService;
 import com.moshna.traker.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -64,7 +56,7 @@ public class UserController {
 
     @PostMapping("{userId}/remove")
     public String removeUser(
-                                @PathVariable(value = "user") long id,
+                                @PathVariable(value = "userId") long id,
                                 Model model) {
         return userService.removeUser(id, model);
     }
@@ -88,7 +80,7 @@ public class UserController {
 
     @PostMapping("{userId}/expenses/{expenseId}/remove")
     public String removeExpense(@PathVariable(value = "expenseId") long expenseId,
-                                Model model) throws Exception {
+                                Model model) {
         return userService.removeExpense(expenseId, model);
     }
 
