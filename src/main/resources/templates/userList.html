@@ -29,8 +29,8 @@
     </tbody>
 </table>
 <form th:action="@{/registration}" method="post" enctype="multipart/form-data">
-    <div><label> User Name : <input type="text" name="username" class="form-control"/> </label></div>
-    <div><label> Password: <input type="password" name="password" class="form-control"/> </label></div>
+    <div><label> User Name : <input type="text" name="username" class="form-control" required/> </label></div>
+    <div><label> Password: <input type="password" name="password" class="form-control" required/> </label></div>
     <div th:each="role: ${allRoles}">
         <input type="checkbox" th:name="${role}" th:value="${role}"/>
         <td th:text="${role}"></td>

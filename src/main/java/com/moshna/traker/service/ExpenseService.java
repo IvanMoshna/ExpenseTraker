@@ -3,6 +3,7 @@ package com.moshna.traker.service;
 import com.moshna.traker.dto.ExpenseDto;
 import com.moshna.traker.mapper.ExpenseMapping;
 import com.moshna.traker.model.Expense;
+import com.moshna.traker.model.User;
 import com.moshna.traker.repo.ExpenseRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,11 +21,11 @@ public class ExpenseService {
 
     private final ExpenseRepo expenseRepo;
 
-    public void addExpense(String description, String comment, BigDecimal price, long userId) {
+    public void addExpense(String description, String comment, BigDecimal price, User user) {
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
 
-        Expense expense = new Expense(date, time, description, price, comment, userId);
+        Expense expense = new Expense(date, time, description, price, comment, user);
         expenseRepo.save(expense);
     }
 

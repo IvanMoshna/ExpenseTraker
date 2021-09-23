@@ -154,7 +154,7 @@ public class UserService implements UserDetailsService {
         if (auth != null && auth.getAuthorities().stream()
                     .anyMatch(a -> a.getAuthority().equals(Role.ADMIN.name())) ||
                      id == user.getId()) {
-            expenseService.addExpense(description, comment, price, id);
+            expenseService.addExpense(description, comment, price, user);
             return getUserExpenses(model);
         } else {
             model.addAttribute(ERROR_MESSAGE, PERMISSION_MESSAGE);
@@ -168,7 +168,7 @@ public class UserService implements UserDetailsService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals(Role.ADMIN.name())) ||
-                expense.getUserId() == user.getId()) {
+                expense.getUser().getId() == user.getId()) {
 
 
             model.addAttribute(USER_ID, user.getId());
@@ -199,17 +199,21 @@ public class UserService implements UserDetailsService {
     }
 
     public String removeUser(Long id, Model model) {
-        //TODO: you can't remove yourself
-        List<Expense> expenses = expenseRepo.findAllByUserId(id);
-        for (Expense e : expenses) {
-            expenseRepo.deleteById(e.getId());
-        }
-        userRepo.deleteById(id);
+        if(id == getCurrentlyUser().getId()) {
+            model.addAttribute(ERROR_MESSAGE, "You can't remove yourself");
+            return ERROR;
+        } else {
+            List<Expense> expenses = expenseRepo.findAllByUserId(id);
+            for (Expense e : expenses) {
+                expenseRepo.deleteById(e.getId());
+            }
+            userRepo.deleteById(id);
 
-        model.addAttribute(USER_ID, getCurrentlyUser().getId());
-        model.addAttribute(EXPENSES, expenseService.getExpenseDtoList(
-                expenseService.getExpenseList(getCurrentlyUser().getId())));
-        return USER_EXPENSE;
+            model.addAttribute(USER_ID, getCurrentlyUser().getId());
+            model.addAttribute(EXPENSES, expenseService.getExpenseDtoList(
+                    expenseService.getExpenseList(getCurrentlyUser().getId())));
+            return USER_EXPENSE;
+        }
     }
 
     public String removeExpense(Long id, Model model) {

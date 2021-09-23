@@ -24,17 +24,17 @@ public class Expense {
     private BigDecimal price;
     private String comment;
 
-    //TODO: foreign key
-    private Long userId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "usr_id")
+    private User user;
 
-    public Expense(LocalDate date, LocalTime time, String description, BigDecimal price, String comment, Long userId) {
+    public Expense(LocalDate date, LocalTime time, String description, BigDecimal price, String comment, /*Long userId*/ User user) {
         this.date = date;
         this.time = time;
         this.description = description;
         this.price = price;
         this.comment = comment;
-        this.userId = userId;
+        this.user = user;
     }
-
 
 }

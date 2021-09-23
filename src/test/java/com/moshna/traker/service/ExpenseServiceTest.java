@@ -45,9 +45,9 @@ public class ExpenseServiceTest {
     @Test
     public void getExpenseList() {
         Expense expense = ExpenseUtils.TEST_EXPENSE;
-        Mockito.when(repoMockExpense.findAllByUserId(expense.getUserId())).thenReturn(Collections.singletonList(expense));
+        Mockito.when(repoMockExpense.findAllByUserId(expense.getUser().getId())).thenReturn(Collections.singletonList(expense));
 
-        List<Expense> expenseList = expenseService.getExpenseList(expense.getUserId());
+        List<Expense> expenseList = expenseService.getExpenseList(expense.getUser().getId());
 
         Assertions.assertNotNull(expenseList);
         Assertions.assertEquals(1, expenseList.size());
@@ -56,9 +56,9 @@ public class ExpenseServiceTest {
     @Test
     public void getExpenseList_ReturnNull() {
         Expense expense = ExpenseUtils.TEST_EXPENSE;
-        Mockito.when(repoMockExpense.findAllByUserId(expense.getUserId())).thenReturn(null);
+        Mockito.when(repoMockExpense.findAllByUserId(expense.getUser().getId())).thenReturn(null);
 
-        List<Expense> expenseList = expenseService.getExpenseList(expense.getUserId());
+        List<Expense> expenseList = expenseService.getExpenseList(expense.getUser().getId());
 
         Assertions.assertNotNull(expenseList);
         Assertions.assertEquals(0, expenseList.size());

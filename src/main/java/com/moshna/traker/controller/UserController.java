@@ -56,8 +56,8 @@ public class UserController {
 
     @PostMapping("{userId}/remove")
     public String removeUser(
-                                @PathVariable(value = "userId") long id,
-                                Model model) {
+                            @PathVariable(value = "userId") long id,
+                            Model model) {
         return userService.removeUser(id, model);
     }
 
